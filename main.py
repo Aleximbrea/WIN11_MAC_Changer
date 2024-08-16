@@ -26,6 +26,8 @@ if __name__ == "__main__":
     result = interface.disable_interface()
     print(f'Interface {interface.name} disabled.')
 
+    new_mac = input("Write new MAC address (Leave blank for a random one): ")
+
     # Changing MAC address
     print(f'Changing MAC address...')
     interface.change_mac_address()

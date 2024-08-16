@@ -94,8 +94,3 @@ def generate_mac_address():
     second_char = random.choice(['2', '6', 'A', 'E'])
     mac_address = f"{random.choice('0123456789ABCDEF')}{second_char}{''.join(random.choices('0123456789ABCDEF', k=10))}"
     return mac_address
-    
-    
-
-if __name__ == "__main__":
-    print(generate_mac_address())
