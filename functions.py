@@ -45,10 +45,9 @@ class Interface:
         return id
 
     def change_mac_address(self, new_mac_address=None):
+
         if new_mac_address:
-            new_mac_address = new_mac_address.replace('-', '').replace(':', '')
-            if not len(new_mac_address) == 12 or not re.fullmatch(r'[0-9A-Fa-f]{12}', new_mac_address):
-                raise Exception('Invalid mac address')
+            new_mac_address = format_mac(new_mac_address)
         else:
             # If no mac address is set a random one is created
             new_mac_address = generate_mac_address()
@@ -56,7 +55,9 @@ class Interface:
 
         with winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, registry_path, 0, winreg.KEY_SET_VALUE) as reg_key:
             winreg.SetValueEx(reg_key, "NetworkAddress", 0, winreg.REG_SZ, new_mac_address)
-        self.mac_address = new_mac_address
+
+        return new_mac_address
+
 
 def is_admin():
     if ctypes.windll.shell32.IsUserAnAdmin():
@@ -87,6 +88,12 @@ def get_interfaces():
             # Appending Interface object to the list of interfaces
             interfaces.append(Interface(name=match.group(4), admin_state=match.group(1), state=match.group(2)))
     return interfaces
+
+def format_mac(mac):
+    mac = mac.replace('-', '').replace(':', '')
+    if not len(mac) == 12 or not re.fullmatch(r'[0-9A-Fa-f]{12}', mac):
+        raise Exception('Invalid mac address')
+    return mac
 
 
 def generate_mac_address():

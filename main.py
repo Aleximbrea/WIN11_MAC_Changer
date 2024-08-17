@@ -20,6 +20,7 @@ if __name__ == "__main__":
             interface = i
     if not interface:
         raise Exception('Invalid interface name')
+    
 
     # Disabling the interface
     print(f"Disabling interface {interface.name}...")
@@ -30,12 +31,20 @@ if __name__ == "__main__":
 
     # Changing MAC address
     print(f'Changing MAC address...')
-    interface.change_mac_address()
-    print(f'MAC address changed to {interface.mac_address}')
+    new_mac = interface.change_mac_address(new_mac)
 
     # Enabling interface
     print(f"Enabling interface {interface.name}...")
     result = interface.enable_interface()
     print(f'Interface {interface.name} enabled.')
 
-    input("Press any key to close window")
+    # Cheking if the address changed correctly
+    # Updating interface mac
+    interface.mac_address, _ = interface._getmac()
+    if functions.format_mac(interface.mac_address) == new_mac:
+        print("MAC address changed successfully.")
+    else:
+        print("Something went wrong.")
+    
+
+    input("Press any key to close window.")
